@@ -1,16 +1,27 @@
+package week_1.task_3
+
 import java.io.File
+import java.util.Collections.swap
 
 
 fun main(args: Array<String>) {
-    val a = Reader.lineAsIntList(0)[0]
-    val b = Reader.lineAsIntList(0)[1]
-    val c = a + b
-    Writer.writeLines(c)
+    val n = Reader.lineAsInt(0)
+    val array = Reader.lineAsIntList(1)
+    val indexArray = arrayOfNulls<Int>(n)
+    for (j in 0 until n) {
+        var i = j
+        while (i > 0 && array[i-1] > array[i]) {
+            swap(array, i - 1, i)
+            i--
+        }
+        indexArray[j] = i + 1
+    }
+    Writer.writeLines(indexArray, array)
     Writer.persist()
 }
 
 
-object Reader {
+private object Reader {
 
     private val inputFile = File("input.txt")
 
@@ -29,7 +40,7 @@ object Reader {
 
 }
 
-object Writer {
+private object Writer {
 
     private val outputFile: File = File("output.txt")
 
@@ -37,7 +48,11 @@ object Writer {
 
     fun <T> writeLines(vararg lines: T) = linesForWriting.addAll(
         lines.map {
-            if (it is Collection<*>) it.joinToString(separator = " ") else it.toString()
+            when (it) {
+                is Collection<*> -> it.joinToString(separator = " ")
+                is Array<*> -> it.joinToString(separator = " ")
+                else -> it.toString()
+            }
         }
     )
 

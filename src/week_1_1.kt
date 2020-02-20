@@ -1,18 +1,18 @@
 import java.io.File
 
+
 fun main(args: Array<String>) {
-    val a = Reader.lineAsInt(0)
-    val b = Reader.lineAsIntList(1)
-    val c = Reader.lineAsStringList(2)
+    val a = Reader.lineAsIntList(0)[0]
+    val b = Reader.lineAsIntList(0)[1]
+    val c = a + b
     Writer.writeLines(c)
-    Writer.writeLines(a)
-    Writer.writeLines(b)
     Writer.persist()
 }
 
+
 object Reader {
 
-    private val inputFile: File = File("input.txt")
+    private val inputFile = File("input.txt")
 
     private val lines = inputFile.readLines().map { it.trim() }
 
@@ -20,9 +20,12 @@ object Reader {
 
     fun lineAsInt(index: Int) = lineAsString(index).toInt()
 
-    fun lineAsStringList(index: Int, delimiter: String = " ") = lines[index].split(delimiter).filterNot { it.isBlank() }
+    fun lineAsStringList(index: Int, delimiter: String = " ") = lines[index]
+        .split(delimiter)
+        .filterNot { it.isBlank() }
 
-    fun lineAsIntList(index: Int, delimiter: String = " ") = lineAsStringList(index, delimiter).map { it.toInt() }
+    fun lineAsIntList(index: Int, delimiter: String = " ") = lineAsStringList(index, delimiter)
+        .map { it.toInt() }
 
 }
 
@@ -38,6 +41,8 @@ object Writer {
         }
     )
 
-    fun persist() = outputFile.printWriter().use { out -> linesForWriting.forEach { out.println(it) } }
+    fun persist() = outputFile.printWriter().use { out ->
+        linesForWriting.forEach { out.println(it) }
+    }
 
 }

@@ -1,3 +1,0 @@
-hello world
-1
-23 15 0

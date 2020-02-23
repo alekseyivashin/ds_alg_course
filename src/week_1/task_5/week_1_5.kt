@@ -7,26 +7,19 @@ fun main(args: Array<String>) {
     val n = Reader.lineAsInt(0)
     val a = Reader.lineAsIntList(1)
     val indices = mutableListOf<Pair<Int, Int>>()
-//    val jArray = mutableListOf<Int>()
 
-    for (j in 1 until n) {
-        var i = j - 1
-
-        while (i >= 0 && a[i] > a[i + 1]) {
-            swap(a, i, i + 1)
-//            if (indices.isNotEmpty() && indices.last().first == i + 2 && j != jArray.last()) {
-//                val second = indices.last().second
-//                indices.removeAt(indices.lastIndex)
-//                indices.add(i + 1 to second)
-//                jArray.add(j)
-//            } else {
-//                indices.add(i + 1 to i + 2)
-//                jArray.add(j)
-//            }
-            indices.add(i + 1 to i + 2)
-
-            i--
+    for (j in 0 until n) {
+        var min = j
+        for (i in j + 1 until n) {
+            if (a[i] <= a[min]) {
+                min = i
+            }
         }
+        swap(a, j, min)
+        if (j != min) {
+            indices.add(j + 1 to min + 1)
+        }
+
     }
 
     Writer.outputFile.printWriter().use { out ->

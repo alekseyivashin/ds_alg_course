@@ -3,20 +3,24 @@ package week_1.task_3
 import java.io.File
 import java.util.Collections.swap
 
-
 fun main(args: Array<String>) {
     val n = Reader.lineAsInt(0)
-    val array = Reader.lineAsIntList(1)
-    val indexArray = arrayOfNulls<Int>(n)
-    for (j in 0 until n) {
-        var i = j
-        while (i > 0 && array[i-1] > array[i]) {
-            swap(array, i - 1, i)
+    val a = Reader.lineAsIntList(1)
+
+    val indexes = arrayOfNulls<Int>(n)
+    indexes[0] = 1
+
+    for (j in 1 until n) {
+        var i = j - 1
+
+        while (i >= 0 && a[i] > a[i + 1]) {
+            swap(a, i, i + 1)
             i--
         }
-        indexArray[j] = i + 1
+
+        indexes[j] = i + 2
     }
-    Writer.writeLines(indexArray, array)
+    Writer.writeLines(indexes, a)
     Writer.persist()
 }
 

@@ -1,4 +1,4 @@
-package week_1.task_3
+package week_1.task_5
 
 import java.io.File
 import java.util.Collections.swap
@@ -6,22 +6,30 @@ import java.util.Collections.swap
 fun main(args: Array<String>) {
     val n = Reader.lineAsInt(0)
     val a = Reader.lineAsIntList(1)
+    val indices = mutableListOf<Pair<Int, Int>>()
 
-    val indexes = arrayOfNulls<Int>(n)
-    indexes[0] = 1
-
-    for (j in 1 until n) {
-        var i = j - 1
-
-        while (i >= 0 && a[i] > a[i + 1]) {
-            swap(a, i, i + 1)
-            i--
+    for (j in 0 until n) {
+        var min = j
+        for (i in j + 1 until n) {
+            if (a[i] <= a[min]) {
+                min = i
+            }
+        }
+        swap(a, j, min)
+        if (j != min) {
+            indices.add(j + 1 to min + 1)
         }
 
-        indexes[j] = i + 2
     }
-    Writer.writeLines(indexes, a)
-    Writer.persist()
+
+    Writer.outputFile.printWriter().use { out ->
+        indices.forEach {
+            out.println("Swap elements at indices ${it.first} and ${it.second}.")
+        }
+        out.println("No more swaps needed.")
+        out.println(a.joinToString(separator = " "))
+    }
+
 }
 
 
@@ -42,13 +50,20 @@ private object Reader {
     fun lineAsIntList(index: Int, delimiter: String = " ") = lineAsStringList(index, delimiter)
         .map { it.toInt() }
 
+    fun lineAsDoubleList(index: Int, delimiter: String = " ") = lineAsStringList(index, delimiter)
+        .map { it.toDouble() }
+
 }
 
 private object Writer {
 
-    private val outputFile: File = File("output.txt")
+    val outputFile: File = File("output.txt")
 
     private val linesForWriting = mutableListOf<String>()
+
+    fun <T> writeToLine(vararg values: T) = linesForWriting.add(
+        values.joinToString(separator = " ")
+    )
 
     fun <T> writeLines(vararg lines: T) = linesForWriting.addAll(
         lines.map {
